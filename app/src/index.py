@@ -12,6 +12,7 @@ from apps import entity_choice
 from apps import about
 from apps import methodology
 from apps import footer
+from apps import back_office_entities
 
 from app import app
 
@@ -26,9 +27,9 @@ navbar = dbc.Navbar(
 app.layout = html.Div(
     children=[
         dbc.Container(
-            [dcc.Location(id="url", refresh=False), navbar, html.Br(), html.Div(id="page-content")], fluid=True
-        ),
-        footer.layout,
+            [dcc.Location(id="url", refresh=False), navbar, html.Br(), html.Div(id="page-content"), footer.layout],
+            fluid=True,
+        )
     ]
 )
 
@@ -48,6 +49,8 @@ def display_page(pathname):
         return about.layout
     elif pathname == "/methodologie":
         return methodology.layout
+    elif pathname == "/backoffice/entities":
+        return back_office_entities.layout
     else:
         return home.layout
 

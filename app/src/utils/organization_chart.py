@@ -1,4 +1,5 @@
 import csv
+import json
 
 import dill
 from anytree import NodeMixin, RenderTree
@@ -6,21 +7,27 @@ from anytree.search import find as find_tree
 
 
 class Entity(NodeMixin):
-    def __init__(self, id, label, code_chorus=None, code_osfi=None, code_odrive=None, parent=None, children=None):
+    def __init__(
+        self, id, label, code_chorus=None, code_osfi=None, code_odrive=None, parent=None, children=None, activated=False
+    ):
         self.id = id
         self.label = label
         self.code_chorus = code_chorus
         self.code_osfi = code_osfi
         self.code_odrive = code_odrive
+        self.activated = activated
 
         self.parent = parent
-        if children:
-            self.children = children
 
     def __repr__(self):
         return_string = "%s: %s" % (self.id, self.label)
         return_string += "(%s, %s, %s)" % (self.code_chorus, self.code_osfi, self.code_odrive)
         return return_string
+
+    def to_json(self):
+        to_return_dict = {k: v for k, v in self.__dict__.items() if (("parent" not in k) and ("children" not in k))}
+        to_return_dict["parent"] = self.parent.id
+        return json.dumps(to_return_dict)
 
 
 class OrganizationChart:
